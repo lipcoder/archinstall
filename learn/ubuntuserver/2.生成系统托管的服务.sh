@@ -40,3 +40,8 @@ sudo systemctl start lipcoder.service
 sudo systemctl enable lipcoder.service
 
 systemctl status lipcoder.service
+
+sudo systemctl stop nginx
+
+sudo systemctl disable nginx
+
