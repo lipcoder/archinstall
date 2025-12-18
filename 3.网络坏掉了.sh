@@ -5,6 +5,15 @@ sudo vim /etc/NetworkManager/conf.d/wifi_backend.conf
     [device]
     wifi.backend=iwd
 
+# network手动连接wifi，去排除是kde钱包的问题
+nmcli device
+
+nmcli radio
+
+nmcli device wifi list
+
+nmcli device wifi connect "你的SSID" password "你的密码"
+
 # 2.提示DNS解析有问题，但是我的浏览器可以正常上网，但是我的命令行或者说终端都无法连接
 
 1.检查resolv.conf
