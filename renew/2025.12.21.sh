@@ -666,6 +666,8 @@ nvidia-peermem.ko.zst
 nvidia-uvm.ko.zst
 nvidia.ko.zst
 
+# ===============================================================================================================================================
+
 # 进展很好：mkinitcpio -P 已经针对 6.18.2（arch + zen） 全部成功生成了 initramfs，你现在“可启动性”基本恢复了。
 # 你看到的那些 firmware 警告（ast、qla2xxx 等）是 fallback 镜像包含大量硬件驱动导致的常见提示，通常可以忽略，不影响你的 4060。
 
@@ -685,3 +687,54 @@ sudo dkms autoinstall -k 6.18.2-zen2-1-zen
 
 pacman -Q | grep -E '^linux-headers|^linux-zen-headers'
 
+# ===============================================================================================================================================
+
+ ╭─ 17:00  aria  ~ 
+ ╰──➤ $ sudo pacman -Syu
+:: Synchronizing package databases...
+ core is up to date
+ extra is up to date
+ multilib is up to date
+ archlinuxcn is up to date
+ aur-repo is up to date
+:: Starting full system upgrade...
+ there is nothing to do
+
+ ╭─ 17:00  aria  ~ 
+ ╰──➤ $ nvidia-smi
+Sun Dec 21 17:01:41 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 590.48.01              Driver Version: 590.48.01      CUDA Version: 13.1     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce RTX 4060 ...    Off |   00000000:01:00.0  On |                  N/A |
+| N/A   44C    P8              4W /   55W |     142MiB /   8188MiB |     20%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A            1108      G   /usr/lib/Xorg                             2MiB |
+|    0   N/A  N/A            1548      G   /usr/bin/kwin_wayland                     2MiB |
+|    0   N/A  N/A            1953    C+G   /usr/bin/batata                          70MiB |
++-----------------------------------------------------------------------------------------+
+
+ ╭─ 17:01  aria  ~ 
+ ╰──➤ $ cat /proc/driver/nvidia/version | head -n 5
+NVRM version: NVIDIA UNIX Open Kernel Module for x86_64  590.48.01  Release Build  (root@arch)  
+GCC version:  gcc version 15.2.1 20251112 (GCC) 
+
+ ╭─ 17:01  aria  ~ 
+ ╰──➤ $ uname -r
+6.18.2-arch2-1
+
+ ╭─ 17:01  aria  ~ 
+ ╰──➤ $ dkms status
+nvidia/590.48.01, 6.18.2-arch2-1, x86_64: installed
+nvidia/590.48.01, 6.18.2-zen2-1-zen, x86_64: installed
