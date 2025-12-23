@@ -1,0 +1,2 @@
+
+sudo pacman -S hmcl
