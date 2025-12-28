@@ -42,3 +42,13 @@ source ~/.bashrc
 # 看 VS Code 右下角蓝色状态栏，显示的是哪个 Python，比如 Python 3.10 (venv)。
 
 # 按 Ctrl+Shift+P → 输入 Python: Select Interpreter → 选中你真正装了包的那个解释器。
+
+# ======================================================================控制版本然后创建虚拟环境===========================================================================
+pyenv local 3.12.7
+
+python -m venv .venv
+source .venv/bin/activate
+
+echo 'source .venv/bin/activate' > .envrc
+
+direnv allow
