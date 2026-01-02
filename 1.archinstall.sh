@@ -13,7 +13,7 @@ mount /dev/nvme0n1p4 /mnt
 
 ##装系统主要就是装root也就是/根分区
 
-#使用WIFI
+#使用iwctl连接wifi
 iwctl
 station wlan0 get-networks
 station wlan0 connected magic6
@@ -49,6 +49,7 @@ genfstab -U /mnt >> /mnt/etc/fstab      #这个方法可能会导致一个结果
 sudo pacman -S refind
 mkdir -p /123
 mount /dev/nvme0n1p1 /123
+cd /123
 refind-install --alldrivers
 # 经过多次的验证，这个办法最为可行
 #usedefault 代表不进入交互模式
@@ -66,6 +67,7 @@ set -xeu
 #-x（xtrace）：执行每一行命令前，把“将要执行的命令”打印到标准错误，便于调试。
 #-e（errexit）：脚本中任一简单命令返回非零状态时，立即退出（有若干例外，见下面“坑点”）。
 #-u（nounset）：使用未定义变量时当作错误并退出（如 $foo 未设定）。
+# 在这个模式下运行时如果报错会退出虚拟环境，在敲命令时一定要注意是否在虚拟环境里面
 
 useradd -m aria
 echo 'aria ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers  #在aria用户登录状态下sudo命令不需要root密码
@@ -127,7 +129,7 @@ pacman -S linux-lts linux-lts-headers
 
 #安装显示服务器
 sudo pacman -S xorg xorg-xinit
-#＃#当前的教程最后都是wayland 我目前还不找到KDE使用X11的方法
+#现在的kde已经全面拥抱wayland了，我目前不知道怎么使用x11
 #echo $XDG_SESSION_TYPE 查看当前使用的桌面
 
 #安装桌面
@@ -145,11 +147,3 @@ sudo pacman -S noto-fonts noto-fonts-cjk noto-fonts-emoji
 sudo pacman -S plasma-nm
 sudo pacman -S networkmanager
 sudo systemctl enable NetworkManager
-
-###在我第一次安装KDE后我用手机加数据线供网安装的NetworkManager，虽然此时，
-sudo pacman -S iwd
-sudo systemctl enable iwd
-sudo vim /etc/NetworkManager/conf.d/wifi_backend.conf
-#     [device]
-#     wifi.backend=iwd
-# 将iwd设置为WIFI后端
