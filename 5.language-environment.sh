@@ -22,7 +22,6 @@ pkgs=(
   "golang.org/x/tools/cmd/goimports@latest"                    # 自动导包/格式化
   "mvdan.cc/gofumpt@latest"                                    # 更严格的格式化（可选）
   "honnef.co/go/tools/cmd/staticcheck@latest"                  # 静态检查
-
   "github.com/golangci/golangci-lint/cmd/golangci-lint@latest" # 代码规范整套（可选）
   "github.com/go-delve/delve/cmd/dlv@latest"                   # 调试器
   "github.com/cweill/gotests/gotests@latest"                   # 生成测试
