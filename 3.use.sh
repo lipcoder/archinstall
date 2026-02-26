@@ -6,6 +6,8 @@ sudo pacman -S ark kitty
 # bash美化
 # __git_ps1 是 Git 自带的一个函数，用来在提示符里显示当前目录的 Git 分支
 sudo pacman -S git
+mkdir $HOME/sh/ && cd $HOME/sh/ 
+curl -L -o powerbash.sh https://raw.githubusercontent.com/zw963/powerbash/master/powerbash.sh
 cat >>$HOME/.bashrc <<'EOF'
 if [ -f /usr/share/git/completion/git-prompt.sh ]; then
   . /usr/share/git/completion/git-prompt.sh
