@@ -17,7 +17,7 @@ echo "安装地址为-->$PATH" | tr ':' '\n' | grep -Ei '(^|/)(go|gopath|gobin)(
 grep -Fqx 'export PATH="$HOME/go/bin:$PATH"' ~/.bashrc 2>/dev/null || echo 'export PATH="$HOME/go/bin:$PATH"' >>~/.bashrc
 # echo "$PATH" | tr ':' '\n' （查看系统全局path有什么）
 
-# 一次性安装 VS Code 常用的 Go 工具
+# 一次性安装与更新 vscode及vim 常用的 Go 工具
 pkgs=(
 	"golang.org/x/tools/gopls@latest"                            # 语言服务
 	"golang.org/x/tools/cmd/goimports@latest"                    # 自动导包/格式化
