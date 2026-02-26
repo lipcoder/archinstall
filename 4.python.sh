@@ -11,7 +11,7 @@ fi
 
 # 手动版本
 # python -m venv .venv                     #创建虚拟环境
-# echo 'source .venv/bin/activate' > .envrc #在当前目录生成.envrc
+# echo 'source .venv/bin/activate' >.envrc #在当前目录生成.envrc
 # direnv allow                             #授权direnv使用.envrc,完成后可自动进出
 # source .venv/bin/activate                #激活这个虚拟环境
 # deactivate                               #退出虚拟环境
