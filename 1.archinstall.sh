@@ -58,9 +58,9 @@ genfstab -U /mnt >>/mnt/etc/fstab # 这个方法可能会导致一个结果是�
 # >> /mnt/etc/fstab 追加到目标文件fstab的末尾,下面是示例
 # =============================================================================
 # /dev/nvme0n1p4 LABEL=arch
-# UUID=5dd62408-2ffa-4365-b3fb-010f5df2e860	/         	ext4      	rw,relatime	0 1
+# UUID=...	/         	ext4      	rw,relatime	0 1
 # /dev/nvme0n1p5 LABEL=HOME
-# UUID=dba67df7-de20-48ae-a714-053d7febd8f4	/home         	btrfs     	rw,relatime,ssd,discard=async,space_cache=v2,subvol=/	0 0
+# UUID=...	/home         	btrfs     	rw,relatime,ssd,discard=async,space_cache=v2,subvol=/	0 0
 # =============================================================================
 
 # 安装引导
