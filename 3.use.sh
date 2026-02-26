@@ -31,8 +31,6 @@ yay -S visual-studio-code-bin
 # yazi
 sudo pacman -S yazi
 cat >> "$HOME/.bashrc" <<'EOF'
-
-# Yazi: shell integration (quit yazi and cd to last directory)
 y() {
   local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
   command yazi "$@" --cwd-file="$tmp"
