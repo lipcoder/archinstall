@@ -18,3 +18,6 @@ yay -S pacseek # 使用也是命令行输入pacseek
 
 # 测试软件
 sudo pacman -S vkmark
+
+# 网络下载工具和同步工具
+sudo pacman -S wget rsync
