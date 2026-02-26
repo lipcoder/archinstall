@@ -6,11 +6,10 @@ sudo pacman -S ark kitty
 # bash美化
 # __git_ps1 是 Git 自带的一个函数，用来在提示符里显示当前目录的 Git 分支
 sudo pacman -S git
-cat >> $HOME/.bashrc <<'EOF'
+cat >>$HOME/.bashrc <<'EOF'
 if [ -f /usr/share/git/completion/git-prompt.sh ]; then
   . /usr/share/git/completion/git-prompt.sh
 fi
-
 source ~/sh/powerbash.sh
 EOF
 source ~/.bashrc
@@ -30,7 +29,7 @@ yay -S visual-studio-code-bin
 
 # yazi
 sudo pacman -S yazi
-cat >> "$HOME/.bashrc" <<'EOF'
+cat >>"$HOME/.bashrc" <<'EOF'
 y() {
   local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
   command yazi "$@" --cwd-file="$tmp"
