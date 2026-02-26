@@ -1,4 +1,7 @@
 
+#安装中文字体
+sudo pacman -S noto-fonts noto-fonts-cjk noto-fonts-emoji
+
 #安装输入法
 sudo pacman -S fcitx5 fcitx5-configtool fcitx5-rime 
 ###sudo pacman -S fcitx5-xim fcitx5-im
