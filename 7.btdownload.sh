@@ -1,8 +1,21 @@
-sudo apt update
-sudo apt install -y qbittorrent-nox
+#!/usr/bin/env bash
+set -euo pipefail
 
-cat > /etc/systemd/system/bt.service <<'EOF'
+WORKDIR="/data/data"
+PORT="18080"
 
+SERVICE_USER="${SUDO_USER:-$(id -un)}"
+SERVICE_GROUP="$(id -gn "$SERVICE_USER")"
+
+echo "开始下载"
+sudo apt-get install -y qbittorrent-nox
+
+echo "确保文件夹"
+sudo mkdir -p "$WORKDIR"
+sudo chown -R "$SERVICE_USER:$SERVICE_GROUP" "$WORKDIR"
+
+echo "创建system配置文件"
+sudo tee /etc/systemd/system/bt.service >/dev/null <<EOF
 [Unit]
 Description=bt (qBittorrent-nox headless)
 After=network-online.target
@@ -10,13 +23,13 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-User=aria
-Group=aria
+User=${SERVICE_USER}
+Group=${SERVICE_GROUP}
 
-WorkingDirectory=/data/data
-Environment=HOME=/data/data
+WorkingDirectory=${WORKDIR}
+Environment=HOME=${WORKDIR}
 
-ExecStart=/usr/bin/qbittorrent-nox --webui-port=18080
+ExecStart=/usr/bin/qbittorrent-nox --webui-port=${PORT}
 
 Restart=on-failure
 RestartSec=3
@@ -24,13 +37,8 @@ LimitNOFILE=1048576
 
 [Install]
 WantedBy=multi-user.target
-
 EOF
 
-if ! sudo systemctl daemon-reload; then
-  echo "daemon-reload failed" >&2
-  exit 1
-fi
-
+sudo systemctl daemon-reload
 sudo systemctl enable --now bt.service
-sudo systemctl status bt.service
+sudo systemctl status --no-pager bt.service
