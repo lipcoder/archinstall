@@ -5,7 +5,8 @@
 
 loadkey us #确保键盘为us布局
 
-# -lsblk                        查看当前的所有分区以及分区的大小
+# -lsblk                        查看当前的所有分区以及分区的大小,
+# -lsblk -f						查看label和uuid
 # -fdisk -l                     检查所有分区
 # -blkid                        查看分区的label
 # -cfdisk /dev/nvme0n1p4        操作该分区
