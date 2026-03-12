@@ -1,8 +1,18 @@
-sudo apt update
-sudo apt install -y samba
+#!/usr/bin/env bash
+set -euo pipefail
 
-sudo tee /etc/samba/smb.conf >/dev/null <<'EOF'
+SHARE_PATH="/data/data"
 
+SERVICE_USER="${SUDO_USER:-$(id -un)}"
+SERVICE_GROUP="$(id -gn "$SERVICE_USER")"
+
+sudo apt-get update
+sudo apt-get install -y samba
+
+sudo mkdir -p "$SHARE_PATH"
+sudo chown -R "$SERVICE_USER:$SERVICE_GROUP" "$SHARE_PATH"
+
+sudo tee /etc/samba/smb.conf >/dev/null <<EOF
 [global]
    workgroup = WORKGROUP
    server role = standalone server
@@ -16,16 +26,15 @@ sudo tee /etc/samba/smb.conf >/dev/null <<'EOF'
    disable spoolss = yes
 
 [media]
-   path = /data/data
+   path = $SHARE_PATH
    browseable = yes
    read only = no
    guest ok = yes
-   force user = aria
-
+   force user = $SERVICE_USER
 EOF
 
-sudo testparm -s 2>&1 || exit 1
+sudo testparm -s 2>&1
 
 sudo systemctl enable --now smbd
-
+sudo systemctl restart smbd
 sudo systemctl status smbd --no-pager
