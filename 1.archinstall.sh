@@ -8,16 +8,15 @@ loadkey us #确保键盘为us布局
 # -lsblk                        查看当前的所有分区以及分区的大小,
 # -lsblk -f						查看label和uuid
 # -fdisk -l                     检查所有分区
-# -blkid                        查看分区的label
-# -cfdisk /dev/nvme0n1p4        操作该分区
+# -blkid                        查看分区的label,可能第一下不会出答案
+# -cfdisk /dev/nvme0n1        	操作该分区或者硬盘，主要是为了给未分区的地方分区
 # -mkfs.ext4 /dev/nvme0n1p4     格式化该分区为ext4
 # -e2label /dev/nvme0n1p4 Arch  设定该分区一个label
 
 mount /dev/nvme0n1p4 /mnt
 
-ip link
-# 使用iwctl连接wifi
-# iwctl
+ip a
+# iwctl	使用iwctl连接wifi
 # station wlan0 get-networks
 # station wlan0 connected magic6
 
@@ -40,7 +39,7 @@ pacstrap /mnt base base-devel \
 # arch-install-scripts  - Arch 安装辅助工具（pacstrap/genfstab/arch-chroot）    -生成fstab
 # vim                   - 终端文本编辑器
 # curl                  - 命令行 HTTP(S) 客户端（下载、请求接口、测试服务）
-# iproute2              - 现代网络/链路/路由管理工具（ip、ss 等，替代 net-tools）   -ip a查看ip还有网卡情况
+# iproute2              - 现代网络/链路/路由管理工具（ip、ss 等，替代 net-tools）
 # inetutils             - 常用网络小工具集合（如 ping、hostname、telnet 等）
 # bind                  - DNS 查询/诊断工具（dig、host、nslookup）
 # btrfs-progs           - Btrfs 文件系统工具（创建、子卷/快照管理、检查维护）
