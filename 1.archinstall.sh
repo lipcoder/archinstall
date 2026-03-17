@@ -5,11 +5,10 @@
 
 loadkey us #确保键盘为us布局
 
-# -lsblk                        查看当前的所有分区以及分区的大小,
-# -lsblk -f						查看label和uuid
+# -lsblk                        查看当前的所有分区以及分区的大小,-f 查看label和uuid
 # -fdisk -l                     检查所有分区
 # -blkid                        查看分区的label,可能第一下不会出答案
-# -cfdisk /dev/nvme0n1        	操作该分区或者硬盘，主要是为了给未分区的地方分区
+# -cfdisk /dev/nvme0n1          操作该分区或者硬盘，主要是为了给未分区的地方分区
 # -mkfs.ext4 /dev/nvme0n1p4     格式化该分区为ext4
 # -e2label /dev/nvme0n1p4 Arch  设定该分区一个label
 
@@ -133,11 +132,11 @@ Server = https://mirrors.bfsu.edu.cn/archlinux/$repo/os/$arch
 EOF
 cat >>/etc/pacman.conf <<EOF
 [archlinuxcn]
-Server = https://mirrors.bfsu.edu.cn/archlinuxcn/\$arch
+Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch
 
 [aur-repo]
-Server = https://rom.ie8.pub:2443/aur-repo/\$arch
-#Server = http://fun.ie8.pub:2442/aur-repo/\$arch
+Server = https://rom.ie8.pub:2443/aur-repo/$arch
+#Server = http://fun.ie8.pub:2442/aur-repo/$arch
 EOF
 
 pacman -S archlinuxcn-keyring pacman-contrib
@@ -153,18 +152,18 @@ fi
 
 # 安装需要的内核
 pacman -S linux linux-headers linux-firmware
-
-# 安装显示服务器以及显示管理器
-sudo pacman -S xorg # echo $XDG_SESSION_TYPE 查看当前使用的桌面
-sudo pacman -S sddm
-sudo systemctl enable sddm
-
-# 安装桌面
-sudo pacman -S plasma-desktop
-
-# 必要的桌面软件
-sudo pacman -S plasma-systemmonitor dolphin gparted yay firefox konsole
+# 当遇到ERROR: file found: '/etc/vconsole.conf'时
+# 执行 echo "KEYMAP=us" > /etc/vconsole.conf
 
 # 安装网络服务
-sudo pacman -S --needed networkmanager plasma-nm wpa_supplicant
-sudo systemctl enable NetworkManager
+pacman -S networkmanager
+systemctl enable NetworkManager
+# nmcli device wifi list
+# nmcli device wifi connect "wifi" password "12345678"
+
+# echo $XDG_SESSION_TYPE 查看当前使用的桌面
+# 安装显示管理器以及安装KDE桌面(包括x11和wayland)
+# 安装完整当plasma可以避免遇到kde钱包弹窗的问题
+sudo pacman -S sddm xorg-server plasma plasma-x11-session kwin-x11
+sudo systemctl enable sddm
+sudo pacman -S dolphin
