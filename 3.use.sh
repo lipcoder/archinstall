@@ -19,7 +19,7 @@ function gitm() {
   git commit -m "$*"
 }
 EOF
-mkdir $HOME/sh/ && cd $HOME/sh/ 
+mkdir $HOME/sh/ && cd $HOME/sh/
 curl -L -o powerbash.sh https://raw.githubusercontent.com/zw963/powerbash/master/powerbash.sh
 cat >>$HOME/.bashrc <<'EOF'
 if [ -f /usr/share/git/completion/git-prompt.sh ]; then

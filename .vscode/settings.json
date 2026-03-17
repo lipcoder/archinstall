@@ -5,6 +5,10 @@
     "explorer.confirmDragAndDrop": false,
     "explorer.confirmPasteNative": false,
     "editor.formatOnSave": true,
+    "[shellscript]": {
+        "editor.defaultFormatter": "mkhl.shfmt",
+        "editor.formatOnSave": true
+    },
     "jdk.telemetry.enabled": false,
     "diffEditor.ignoreTrimWhitespace": false,
     "update.showReleaseNotes": false,
