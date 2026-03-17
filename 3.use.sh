@@ -3,9 +3,22 @@
 # 基础软件
 sudo pacman -S ark kitty yay firefox gparted
 
+# clean命令，用来多余的包
+cat >>$HOME/.bashrc <<'EOF'
+alias clean="sudo pacman -Qdttq | sudo pacman -Rns -"
+EOF
+
 # bash美化
 # __git_ps1 是 Git 自带的一个函数，用来在提示符里显示当前目录的 Git 分支
 sudo pacman -S git
+cat >>$HOME/.bashrc <<'EOF'
+alias gitl="git log -M --graph --color=always --pretty=format:'%Cred%h%Creset -%C(blue)%d%Creset %s%Cgreen(%cr,%an)%Creset' --abbrev-commit --date=relative --ignore-submodules"
+alias gits="git status --ignore-submodules='dirty' -sb -uall"
+alias gita='git add'
+function gitm() {
+  git commit -m "$*"
+}
+EOF
 mkdir $HOME/sh/ && cd $HOME/sh/ 
 curl -L -o powerbash.sh https://raw.githubusercontent.com/zw963/powerbash/master/powerbash.sh
 cat >>$HOME/.bashrc <<'EOF'
