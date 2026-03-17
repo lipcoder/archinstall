@@ -1,6 +1,5 @@
 caetanominuzzo.terminal-to-here
 christian-kohler.path-intellisense
-esbenp.prettier-vscode
 golang.go
 mechatroner.rainbow-csv
 mkhl.shfmt
