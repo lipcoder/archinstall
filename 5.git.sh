@@ -3,6 +3,11 @@ git config --global user.name "lipcoder"
 git config --global user.email "you@example.com"
 git config --local user.name "lipcoder"
 git config --local user.email "you@example.com"
+# 查看身份和配置
+git config user.name
+git config user.email
+git config --list
+git remote -v
 
 # 测试
 ssh -T git@github.com
@@ -11,6 +16,10 @@ ssh -T git@github.com
 git init                             # 创建仓库
 git remote add origin git@github.com # 指向远程仓库
 git push -u origin "master"          # 指向仓库的分支
+
+# 修改
+git remote set-url origin git@ #修改当前的远程
+git remote remove origin       #直接删除远程地址
 
 # 合并
 git init
