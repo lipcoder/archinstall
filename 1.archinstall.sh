@@ -117,13 +117,13 @@ ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && hwclock -w
 # 开启需要的locale
 sed -i 's/^#\(en_US.UTF-8 UTF-8\)/\1/' /etc/locale.gen
 sed -i 's/^#\(zh_CN.UTF-8 UTF-8\)/\1/' /etc/locale.gen
-# 可以使用 vim /etc/locale.gen,用/命令搜索
+# 可以使用 vim /etc/locale.gen,用/命令搜索,然后按x删除#取消注释
 # en_US.UTF-8 UTF-8
 # zh_CN.UTF-8 UTF-8
 # zh_TW.UTF-8 UTF-8
-# 然后按x删除#取消注释
 
-locale-gen && echo 'LANG=en_US.UTF-8' >/etc/locale.conf # 更新对应的 locale 文件,设置系统的默认语言环境
+# 更新对应的 locale 文件,设置系统的默认语言环境
+locale-gen && localectl set-locale LANG=en_US.UTF-8
 
 # 配置镜像源
 cat >/etc/pacman.d/mirrorlist <<'EOF'
@@ -133,10 +133,6 @@ EOF
 cat >>/etc/pacman.conf <<EOF
 [archlinuxcn]
 Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch
-
-[aur-repo]
-Server = https://rom.ie8.pub:2443/aur-repo/$arch
-#Server = http://fun.ie8.pub:2442/aur-repo/$arch
 EOF
 
 pacman -S archlinuxcn-keyring pacman-contrib
@@ -151,9 +147,9 @@ elif grep /proc/cpuinfo -qs -e 'AuthenticAMD'; then
 fi
 
 # 安装需要的内核
+#mkinitcpio v40把sd-vconsole加进了默认hook，而v39.2的默认mkinitcpio.conf里没有
+echo "KEYMAP=us" >/etc/vconsole.conf
 pacman -S linux linux-headers linux-firmware
-# 当遇到ERROR: file found: '/etc/vconsole.conf'时
-# 执行 echo "KEYMAP=us" > /etc/vconsole.conf
 
 # 安装网络服务
 pacman -S networkmanager
