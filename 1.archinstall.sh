@@ -30,8 +30,7 @@ sed -i '1iServer = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch
 # 将基准包安装到/mnt目标目录中，然后生成新的系统
 pacstrap /mnt base base-devel \
 	cmake arch-install-scripts vim curl \
-	iproute2 inetutils bind btrfs-progs
-
+	iproute2 inetutils bind
 # base                  - 系统最小基础环境（能启动、能进 shell、基础工具）
 # base-devel            - 编译/构建工具链包组（make/gcc 等，便于编译软件与用 AUR）
 # cmake                 - 构建系统生成器（很多源码/软件编译会用到）
@@ -44,10 +43,10 @@ pacstrap /mnt base base-devel \
 # btrfs-progs           - Btrfs 文件系统工具（创建、子卷/快照管理、检查维护）
 
 # 挂载home分区
-mkfs.btrfs /dev/nvme0n1p5
+mkfs.ext4 /dev/nvme0n1p5
 e2label /dev/nvme0n1p5 HOME
 mkdir /mnt/home
-mount -t btrfs /dev/nvme0n1p5 /mnt/home
+mount -t ext4 /dev/nvme0n1p5 /mnt/home
 # -t btrfs  手指定为btrfs格式，更加安全
 
 # 生成fstab条目
@@ -62,41 +61,8 @@ genfstab -U /mnt >>/mnt/etc/fstab # 这个方法可能会导致一个结果是�
 # UUID=...	/home         	btrfs     	rw,relatime,ssd,discard=async,space_cache=v2,subvol=/	0 0
 # =============================================================================
 
-# 安装引导
-sudo pacman -S refind
-umount /mnt && mount /dev/nvme0n1p1 /mnt
-refind-install --alldrivers
-# 经过多次的验证，这个办法最为可行
-# usedefault 代表不进入交互模式
-# alldrivers包括了更多的驱动，原来可能只有ext4
-
-cat >/mnt/EFI/refind/refind.config <<'EOF'
-timeout 20
-scanfor external,optical,manual
-
-menuentry "Arch Linux with intel-ucode" {
-    icon     /EFI/refind/icons/os_arch.png
-    volume   "arch"
-    loader   /boot/vmlinuz-linux
-    initrd   /boot/initramfs-linux.img
-    options  "root=LABEL=arch rw initrd=boot\intel-ucode.img sysrq_always_enabled=1"
-    submenuentry "Boot using fallback initramfs" {
-        initrd /boot/initramfs-linux-fallback.img
-    }
-    submenuentry "Boot to terminal" {
-        add_options "systemd.unit=multi-user.target"
-    }
-}
-
-menuentry "Windows10" {
-   loader \EFI\Microsoft\Boot\bootmgfw.efi
-}
-EOF
-
-# =============================================================================
-
 # 切换到目标　root
-umount /mnt && mount /dev/nvme0n1p4 /mnt && arch-chroot /mnt /bin/bash
+arch-chroot /mnt /bin/bash
 
 set -xeu
 # -x（xtrace）：执行每一行命令前，把“将要执行的命令”打印到标准错误，便于调试。
@@ -135,9 +101,8 @@ cat >>/etc/pacman.conf <<EOF
 Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch
 EOF
 
-pacman -S archlinuxcn-keyring pacman-contrib
-
 pacman -Sy && pacman -Fy
+pacman -S archlinuxcn-keyring pacman-contrib
 
 # 根据cpu来安装对应的微码包
 if grep /proc/cpuinfo -qs -e 'GenuineIntel'; then
@@ -157,9 +122,43 @@ systemctl enable NetworkManager
 # nmcli device wifi list
 # nmcli device wifi connect "wifi" password "12345678"
 
-# echo $XDG_SESSION_TYPE 查看当前使用的桌面
+# 安装gnome
+sudo pacman -S gnome gdm
+sudo systemctl enable gdm
 # 安装显示管理器以及安装KDE桌面(包括x11和wayland)
 # 安装完整当plasma可以避免遇到kde钱包弹窗的问题
 sudo pacman -S sddm xorg-server plasma plasma-x11-session kwin-x11
 sudo systemctl enable sddm
 sudo pacman -S dolphin
+# echo $XDG_SESSION_TYPE 查看当前使用的
+
+# 安装引导
+sudo pacman -S refind
+umount /mnt && mount /dev/nvme0n1p1 /mnt
+refind-install --alldrivers
+# 经过多次的验证，这个办法最为可行
+# usedefault 代表不进入交互模式
+# alldrivers包括了更多的驱动，原来可能只有ext4
+
+cat >/mnt/EFI/refind/refind.config <<'EOF'
+timeout 20
+scanfor external,optical,manual
+
+menuentry "Arch Linux with intel-ucode" {
+    icon     /EFI/refind/icons/os_arch.png
+    volume   "arch"
+    loader   /boot/vmlinuz-linux
+    initrd   /boot/initramfs-linux.img
+    options  "root=LABEL=arch rw initrd=boot\intel-ucode.img sysrq_always_enabled=1"
+    submenuentry "Boot using fallback initramfs" {
+        initrd /boot/initramfs-linux-fallback.img
+    }
+    submenuentry "Boot to terminal" {
+        add_options "systemd.unit=multi-user.target"
+    }
+}
+
+menuentry "Windows10" {
+   loader \EFI\Microsoft\Boot\bootmgfw.efi
+}
+EOF
