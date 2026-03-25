@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # 导出当前插件(code --list-extensions > vscode-extensions.txt)
 # 导入插件
-set -euo pipefail
+set -u
 
 while IFS= read -r ext; do
 	[ -z "$ext" ] && continue
