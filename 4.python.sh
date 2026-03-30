@@ -1,24 +1,14 @@
 # 安装python，以及direnv自动进入进出虚拟环境，还有控制python版本
-set -euo pipefail
-if command -v apt >/dev/null 2>&1; then
-	sudo apt install -y python3 python3-venv python3-pip direnv pyenv
-elif command -v pacman >/dev/null 2>&1; then
-	sudo pacman -S python python-pip direnv pyenv
-else
-	echo "Error: unsupported system (need apt or pacman)." >&2
-	exit 1
-fi
+sudo pacman -S python python-pip direnv pyenv
 
 # 手动版本
 # python -m venv .venv                     #创建虚拟环境
-# echo 'source .venv/bin/activate' >.envrc #在当前目录生成.envrc
-# direnv allow                             #授权direnv使用.envrc,完成后可自动进出
 # source .venv/bin/activate                #激活这个虚拟环境
 # deactivate                               #退出虚拟环境
-# pyenv install -s 3.14.3                  #下载特定版本
-# pyenv local 3.12.7                       #在当前目录写入.python-version
 
 # 控制python版本
+# pyenv install -s 3.14.3                  #下载特定版本
+# pyenv local 3.12.7                       #在当前目录写入.python-version
 cat >>~/.bashrc <<'EOF'
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
@@ -26,6 +16,8 @@ eval "$(pyenv init -)"
 EOF
 
 # 自动进入进出虚拟环境
+# echo 'source .venv/bin/activate' >.envrc #在当前目录生成.envrc
+# direnv allow                             #授权direnv使用.envrc,完成后可自动进出
 cat >>~/.bashrc <<'EOF'
 # python虚拟环境
 eval "$(direnv hook bash)" 
