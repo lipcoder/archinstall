@@ -26,9 +26,6 @@
     },
     "git.confirmSync": false,
     "liveServer.settings.donotShowInfoMsg": true,
-    "workbench.editorAssociations": {
-        "*.docx": "cweijan.officeViewer"
-    },
     "chat.agent.codeBlockProgress": false,
     "chat.agent.enabled": false,
     "chat.agent.thinking.collapsedTools": "off",
@@ -70,7 +67,8 @@
     "terminal.integrated.initialHint": false,
     "terminal.integrated.cwd": "",
     "workbench.panel.defaultLocation": "right",
-    "workbench.settings.applyToAllProfiles": [
-        
-    ]
+    "workbench.settings.applyToAllProfiles": [],
+    "python-envs.terminal.autoActivationType": "off",
+    "python.terminal.activateEnvironment": false,
+    "python.terminal.activateEnvInCurrentTerminal": false
 }
