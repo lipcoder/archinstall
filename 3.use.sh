@@ -159,3 +159,56 @@ use_stdin = false
 success_symbol = "[❯](bold #7dcfff)"
 error_symbol = "[❯](bold #f7768e)"
 EOF
+
+# 命令行消息发送至系统通知
+sudo pacman -S libnotify
+
+mkdir -p ~/.local/share/applications
+cat >> ~/.local/share/applications/command-alert.desktop <<'EOF'
+[Desktop Entry]
+Type=Application
+Name=命令提醒
+Comment=Terminal command completion notifications
+Icon=utilities-terminal
+Exec=/bin/true
+NoDisplay=true
+EOF
+
+update-desktop-database ~/.local/share/applications 2>/dev/null
+
+cat >> ~/bashrc <<'EOF'
+# 命令行消息发送至系统通知,-t为消息关闭时间
+alert() {
+	local exit_code=$?
+	local msg
+
+	if [ -n "$*" ]; then
+		msg="$*"
+	else
+		msg="$(history 1 | sed -E 's/^[[:space:]]*[0-9]+[[:space:]]*//; s/[;&|[:space:]]*alert([[:space:]].*)?[[:space:]]*$//')"
+		[ -z "$msg" ] && msg="上一条命令"
+	fi
+
+	if [ "$exit_code" -eq 0 ]; then
+		notify-send \
+			-a "命令提醒" \
+			-i utilities-terminal \
+			-u normal \
+			-t 5000 \
+			-h string:desktop-entry:command-alert \
+			"命令完成" \
+			"$msg 已成功完成"
+	else
+		notify-send \
+			-a "命令提醒" \
+			-i dialog-error \
+			-u critical \
+			-t 0 \
+			-h string:desktop-entry:command-alert \
+			"命令失败" \
+			"$msg 失败，退出码：$exit_code"
+	fi
+
+	return "$exit_code"
+}
+EOF
