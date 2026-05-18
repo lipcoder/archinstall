@@ -1,7 +1,11 @@
 # 本文件用于安装需要的文件，和配置一些软件
 
 # 基础软件
-sudo pacman -S ark kitty yay firefox gparted
+sudo pacman -S ark kitty yay firefox gparted git
+
+# vscode
+yay -S visual-studio-code-bin
+sudo pacman -S shfmt
 
 # clean命令，用来多余的包
 cat >>$HOME/.bashrc <<'EOF'
@@ -10,7 +14,6 @@ EOF
 
 # bash美化
 # __git_ps1 是 Git 自带的一个函数，用来在提示符里显示当前目录的 Git 分支
-sudo pacman -S git
 cat >>$HOME/.bashrc <<'EOF'
 alias gitl="git log -M --graph --color=always --pretty=format:'%Cred%h%Creset -%C(blue)%d%Creset %s%Cgreen(%cr,%an)%Creset' --abbrev-commit --date=relative --ignore-submodules"
 alias gits="git status --ignore-submodules='dirty' -sb -uall"
@@ -19,31 +22,32 @@ function gitm() {
 	git commit -m "$*"
 }
 EOF
-mkdir $HOME/sh/ && cd $HOME/sh/
-curl -L -o powerbash.sh https://raw.githubusercontent.com/zw963/powerbash/master/powerbash.sh
-cat >>$HOME/.bashrc <<'EOF'
-if [ -f /usr/share/git/completion/git-prompt.sh ]; then
-  . /usr/share/git/completion/git-prompt.sh
-fi
-source ~/sh/powerbash.sh
+
+cat >> ~/.config/kitty/kitty.conf <<'EOF'
+background #212121
+foreground #eeeeee
+
+cursor #eeeeee
+selection_background #424242
+selection_foreground #ffffff
+
+background_opacity 1.0
+
+# 使用 splits 布局，这样新窗口表现为真正的分屏
+enabled_layouts splits
+
+# Ctrl + Enter 新建分屏，并继承当前目录
+map ctrl+enter launch --cwd=current --location=split
+
+# Alt + 方向键切换到对应方向的分屏
+map alt+left neighboring_window left
+map alt+right neighboring_window right
+map alt+up neighboring_window top
+map alt+down neighboring_window bottom
+# <<< custom kitty split keys
+
 EOF
-source ~/.bashrc
 
-# 配置蓝牙
-sudo pacman -S bluez bluez-utils
-sudo systemctl enable --now bluetooth
-# 这些是针对蓝牙连接耳机的
-sudo pacman -S pipewire pipewire-pulse pipewire-alsa wireplumber
-# 这个不需要手动启动，这个是用户会话服务，一般开机会自动启动，重启就行了
-systemctl --user status pipewire
-systemctl --user status wireplumber
-# kde蓝牙需要的前端，gnome一般都推荐安装完整桌面，所以这里不罗列需要的包了
-sudo pacman -S bluedevil
-
-# vscode
-yay -S visual-studio-code-bin
-
-# bash美化
 # 要使用的工具和字体
 sudo pacman -S starship ttf-cascadia-code-nerd
 mkdir -p ~/.config/kitty && echo "font_family CaskaydiaCove Nerd Font" >>~/.config/kitty/kitty.conf

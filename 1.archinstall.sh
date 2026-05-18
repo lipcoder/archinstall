@@ -3,7 +3,7 @@
 # 所有p4都是我当前安装的arch的盘，p5为home
 # 装系统主要就是装root也就是/根分区,只要能进系统就不需要过多担心
 
-loadkey us #确保键盘为us布局
+loadkeys us #确保键盘为us布局
 
 # -lsblk                        查看当前的所有分区以及分区的大小,-f 查看label和uuid
 # -fdisk -l                     检查所有分区
