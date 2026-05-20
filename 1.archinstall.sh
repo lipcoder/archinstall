@@ -49,6 +49,13 @@ mkdir /mnt/home
 mount -t ext4 /dev/nvme0n1p5 /mnt/home
 # -t btrfs  手指定为btrfs格式，更加安全
 
+# swapfile
+fallocate -l 8G /mnt/swapfile # 创建swapfile
+chmod 600 /mnt/swapfile       # 控制权限
+mkswap /mnt/swapfile          # 格式化为 swap
+swapon /mnt/swapfile          # 启用
+swapon --show                 # 检查swap是否启用
+
 # 生成fstab条目
 genfstab -U /mnt >>/mnt/etc/fstab # 这个方法可能会导致一个结果是把把另一个分区也变成了/切记要检查一下
 # -U 使用分区的UUID
@@ -139,26 +146,4 @@ refind-install --alldrivers
 # 经过多次的验证，这个办法最为可行
 # usedefault 代表不进入交互模式
 # alldrivers包括了更多的驱动，原来可能只有ext4
-
-cat >/mnt/EFI/refind/refind.config <<'EOF'
-timeout 20
-scanfor external,optical,manual
-
-menuentry "Arch Linux with intel-ucode" {
-    icon     /EFI/refind/icons/os_arch.png
-    volume   "arch"
-    loader   /boot/vmlinuz-linux
-    initrd   /boot/initramfs-linux.img
-    options  "root=LABEL=arch rw initrd=boot\intel-ucode.img sysrq_always_enabled=1"
-    submenuentry "Boot using fallback initramfs" {
-        initrd /boot/initramfs-linux-fallback.img
-    }
-    submenuentry "Boot to terminal" {
-        add_options "systemd.unit=multi-user.target"
-    }
-}
-
-menuentry "Windows10" {
-   loader \EFI\Microsoft\Boot\bootmgfw.efi
-}
-EOF
+# 重启后refind检测不到arch的时候优先排查内核文件是否存在
