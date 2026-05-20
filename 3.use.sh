@@ -1,5 +1,8 @@
 # 本文件用于安装需要的文件，和配置一些软件
 
+# 垃圾kde钱包
+sed -i '/^\[Wallet\]$/,/^\[/{s/^Enabled=.*/Enabled=false/}' ~/.config/kwalletrc
+
 # 基础软件
 sudo pacman -S ark kitty yay firefox gparted git
 
