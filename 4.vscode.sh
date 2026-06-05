@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# 导出当前插件(code --list-extensions > vscode-extensions.txt)
+# 导出当前插件
+# code --list-extensions > vscode-extensions.txt
 # 导入插件
 set -u
 

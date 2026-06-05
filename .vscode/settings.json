@@ -8,7 +8,7 @@
     "jdk.telemetry.enabled": false,
     "diffEditor.ignoreTrimWhitespace": false,
     "update.showReleaseNotes": false,
-    "workbench.secondarySideBar.defaultVisibility": "hidden",
+    "workbench.secondarySideBar.defaultVisibility": "visible",
     "chat.allowAnonymousAccess": true,
     "explorer.fileNesting.patterns": {
         "*.ts": "${capture}.js",
@@ -27,10 +27,8 @@
     "git.confirmSync": false,
     "liveServer.settings.donotShowInfoMsg": true,
     "chat.agent.codeBlockProgress": false,
-    "chat.agent.enabled": false,
     "chat.agent.thinking.collapsedTools": "off",
     "chat.agent.thinkingStyle": "collapsed",
-    "chat.disableAIFeatures": true,
     "json.schemas": [
         {
             "fileMatch": [
@@ -74,5 +72,9 @@
     "terminal.integrated.fontFamily": "monospace",
     "terminal.integrated.fontSize": 13,
     "terminal.integrated.lineHeight": 1.0,
-    "terminal.integrated.letterSpacing": 0
+    "terminal.integrated.letterSpacing": 0,
+    "security.workspace.trust.untrustedFiles": "open",
+    "vscode-office.editorTheme": "One Dark",
+    "github.copilot.nextEditSuggestions.eagerness": "low",
+    "chat.viewSessions.orientation": "stacked"
 }
