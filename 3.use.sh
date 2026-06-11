@@ -1,20 +1,3 @@
-# 本文件用于安装需要的文件，和配置一些软件
-
-# 垃圾kde钱包
-sed -i '/^\[Wallet\]$/,/^\[/{s/^Enabled=.*/Enabled=false/}' ~/.config/kwalletrc
-
-# 基础软件
-sudo pacman -S ark kitty yay firefox gparted git
-
-# vscode
-yay -S visual-studio-code-bin
-sudo pacman -S shfmt
-
-# clean命令，用来多余的包
-cat >>$HOME/.bashrc <<'EOF'
-alias clean="sudo pacman -Qdttq | sudo pacman -Rns -"
-EOF
-
 # bash美化
 # __git_ps1 是 Git 自带的一个函数，用来在提示符里显示当前目录的 Git 分支
 cat >>$HOME/.bashrc <<'EOF'
@@ -26,7 +9,7 @@ function gitm() {
 }
 EOF
 
-cat >> ~/.config/kitty/kitty.conf <<'EOF'
+cat >>~/.config/kitty/kitty.conf <<'EOF'
 background #212121
 foreground #eeeeee
 
@@ -165,57 +148,4 @@ use_stdin = false
 [character]
 success_symbol = "[❯](bold #7dcfff)"
 error_symbol = "[❯](bold #f7768e)"
-EOF
-
-# 命令行消息发送至系统通知
-sudo pacman -S libnotify
-
-mkdir -p ~/.local/share/applications
-cat >> ~/.local/share/applications/command-alert.desktop <<'EOF'
-[Desktop Entry]
-Type=Application
-Name=命令提醒
-Comment=Terminal command completion notifications
-Icon=utilities-terminal
-Exec=/bin/true
-NoDisplay=true
-EOF
-
-update-desktop-database ~/.local/share/applications 2>/dev/null
-
-cat >> ~/bashrc <<'EOF'
-# 命令行消息发送至系统通知,-t为消息关闭时间
-alert() {
-	local exit_code=$?
-	local msg
-
-	if [ -n "$*" ]; then
-		msg="$*"
-	else
-		msg="$(history 1 | sed -E 's/^[[:space:]]*[0-9]+[[:space:]]*//; s/[;&|[:space:]]*alert([[:space:]].*)?[[:space:]]*$//')"
-		[ -z "$msg" ] && msg="上一条命令"
-	fi
-
-	if [ "$exit_code" -eq 0 ]; then
-		notify-send \
-			-a "命令提醒" \
-			-i utilities-terminal \
-			-u normal \
-			-t 5000 \
-			-h string:desktop-entry:command-alert \
-			"命令完成" \
-			"$msg 已成功完成"
-	else
-		notify-send \
-			-a "命令提醒" \
-			-i dialog-error \
-			-u critical \
-			-t 0 \
-			-h string:desktop-entry:command-alert \
-			"命令失败" \
-			"$msg 失败，退出码：$exit_code"
-	fi
-
-	return "$exit_code"
-}
 EOF

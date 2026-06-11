@@ -147,3 +147,25 @@ refind-install --alldrivers
 # usedefault 代表不进入交互模式
 # alldrivers包括了更多的驱动，原来可能只有ext4
 # 重启后refind检测不到arch的时候优先排查内核文件是否存在
+
+sudo pacman -S ark kitty yay firefox gparted git
+
+yay -S visual-studio-code-bin
+sudo pacman -S shfmt
+
+# clean命令，用来多余的包
+cat >>$HOME/.bashrc <<'EOF'
+alias clean="sudo pacman -Qdttq | sudo pacman -Rns -"
+EOF
+
+# 配置蓝牙
+sudo pacman -S bluez bluez-utils
+sudo systemctl enable --now bluetooth
+# 这些是针对蓝牙连接耳机的
+sudo pacman -S pipewire pipewire-pulse pipewire-alsa wireplumber
+# 这个不需要手动启动，这个是用户会话服务，一般开机会自动启动，重启就行了
+systemctl --user status pipewire
+systemctl --user status wireplumber
+# kde蓝牙需要的前端，gnome一般都推荐安装完整桌面，所以这里不罗列需要的包了
+sudo pacman -S bluedevil
+
